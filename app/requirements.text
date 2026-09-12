@@ -1,0 +1,6 @@
+"fastapi[standard]"
+sqlmodel
+"psycopg[binary]"
+pydantic-settings
+--dev
+pytest
