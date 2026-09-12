@@ -22,3 +22,9 @@ def create_access_token(subject: str | Any, expires_delta: timedelta) -> str:
     to_encode = {"exp": expire, "sub": str(subject)}
     encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
+
+
+def verify_password(
+        plain_password: str, hashed_password: str
+) -> tuple[bool, str | None]:
+    return password_hash.verify_and_update(plain_password, hashed_password)
