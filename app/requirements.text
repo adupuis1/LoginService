@@ -4,3 +4,5 @@ sqlmodel
 pydantic-settings
 --dev
 pytest
+jwt
+pwdlib
