@@ -14,6 +14,10 @@ class UserBase(SQLModel):
 class UserCreate(UserBase):
     password: str = Field(min_length=8, max_length=128)
 
+class UserUpdate(UserBase):
+    username : str | None = Field(defualt=None, max_length=255)
+    password : str | None = Field(defualt=None, max_length=255)
+    is_superuser : bool | None = None
 
 class User(UserBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4)
@@ -26,3 +30,13 @@ class User(UserBase, table=True):
 class UserPublic(UserBase):
     id: uuid.UUID
     created_at: datetime | None = None 
+
+# JSON payload containing access token
+class Token(SQLModel):
+    access_token: str
+    token_type: str = "bearer"
+
+# Contents of JWT token
+class TokenPayload(SQLModel):
+    sub: str | None = None
+

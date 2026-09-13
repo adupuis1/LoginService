@@ -4,7 +4,7 @@ from typing import Annotated
 from fastapi import Depends
 from sqlmodel import Session, SQLModel, create_engine
 
-from app.config import settings
+from app.core.config import settings
 from app.models import User
 
 engine = create_engine(settings.DATABASE_URL)
