@@ -19,5 +19,5 @@ _jwk.update({"kid": settings.JWT_KEY_ID, "use": "sig", "alg": security.ALGORITHM
 JWKS = {"keys": [_jwk]}
 
 @router.get("/.well-known/jwks.json")
-def jwks() -> dict[str, any]:
+def jwks() -> dict[str, Any]:
     return JWKS
