@@ -4,5 +4,7 @@ sqlmodel
 pydantic-settings
 --dev
 pytest
-jwt
+pyjwt
 pwdlib
+pwdlib[argon2]
+pwdlib[bcrypt]

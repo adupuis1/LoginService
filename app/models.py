@@ -15,13 +15,13 @@ class UserCreate(UserBase):
     password: str = Field(min_length=8, max_length=128)
 
 class UserUpdate(UserBase):
-    username : str | None = Field(defualt=None, max_length=255)
-    password : str | None = Field(defualt=None, max_length=255)
+    username : str | None = Field(default=None, max_length=255)
+    password : str | None = Field(default=None, max_length=255)
     is_superuser : bool | None = None
 
 class User(UserBase, table=True):
-    id: uuid.UUID = Field(default_factory=uuid.uuid4)
-    hashed_password = str
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    hashed_password : str
     created_at: datetime | None = Field(
         default_factory=get_date_time_utc,
         sa_type=DateTime(timezone=True),
