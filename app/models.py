@@ -9,10 +9,14 @@ def get_date_time_utc() -> datetime:
 
 class UserBase(SQLModel):
     username : str = Field(unique=True, index=True, max_length=255)
-    
+    is_superuser : bool | None = None
 
 class UserCreate(UserBase):
     password: str = Field(min_length=8, max_length=128)
+
+class UserRegister(SQLModel):
+    password: str = Field(min_length=8, max_length=128)
+    username: str = Field(default=None, max_length=255)
 
 class UserUpdate(UserBase):
     username : str | None = Field(default=None, max_length=255)
@@ -26,7 +30,7 @@ class User(UserBase, table=True):
         default_factory=get_date_time_utc,
         sa_type=DateTime(timezone=True),
     )
-    is_superuser : bool | None = None
+    
 
 class UserPublic(UserBase):
     id: uuid.UUID
