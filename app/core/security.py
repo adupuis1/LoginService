@@ -2,6 +2,7 @@ from datetime import UTC, datetime, timedelta
 import hashlib
 import secrets
 from typing import Any
+from pathlib import Path
 
 import jwt
 from pwdlib import PasswordHash
@@ -18,7 +19,8 @@ password_hash = PasswordHash(
 )
 
 ALGORITHM = "RS256"
-
+PUBLIC_KEY = Path(settings.PUBLIC_KEY_PATH).read_text()
+PRIVATE_KEY = Path(settings.PRIVATE_KEY_PATH).read_text()
 
 def create_access_token(user: User, expires_delta: timedelta) -> str:
     now = datetime.now(UTC)

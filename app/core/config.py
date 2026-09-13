@@ -1,5 +1,5 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from pathlib import Path
+
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
@@ -14,12 +14,12 @@ class Settings(BaseSettings):
     SECRET_KEY: str
 
     # JWT signing (RS256)
-    PRIVATE_KEY_PATH: str = Path("keys/private.pem").read_text()
-    PUBLIC_KEY_PATH: str = Path("keys/public.pem").read_text()
+    PRIVATE_KEY_PATH: str = "keys/private.pem"
+    PUBLIC_KEY_PATH: str = "keys/public.pem"
     JWT_KEY_ID: str = "2026-09"            # the "kid"; change it when you rotate keys
     JWT_ISSUER: str = "http://localhost:8000"
     JWT_AUDIENCE: str = "my-apps"          # start with one shared audience
-    
+
     # 60 minutes * 24 hours * 8 days = 8 days
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 15
     REFRESH_TOKEN_EXPIRE_DAYS: int = 30
