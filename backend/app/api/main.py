@@ -1,7 +1,7 @@
-from backend.app.api.routes import login, users
+from app.api.routes import login, users
 from fastapi import APIRouter
 
-from backend.app.api.routes import utils
+from app.api.routes import utils
 
 api_router = APIRouter()
 

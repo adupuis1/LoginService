@@ -3,10 +3,10 @@ from fastapi.routing import APIRoute
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
-from backend.app.core.config import settings
-from backend.app.core.db import create_db_and_tables
-from backend.app.api.main import api_router
-from backend.app.api.routes import wellknown
+from app.core.config import settings
+from app.core.db import create_db_and_tables
+from app.api.main import api_router
+from app.api.routes import wellknown
 
 def custom_generate_unique_id(route: APIRoute) -> str:
     return f"{route.tags[0]}-{route.name}"

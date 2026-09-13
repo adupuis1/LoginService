@@ -9,8 +9,8 @@ from pwdlib import PasswordHash
 from pwdlib.hashers.argon2 import Argon2Hasher
 from pwdlib.hashers.bcrypt import BcryptHasher
 
-from backend.app.core.config import settings
-from backend.app.models import User
+from app.core.config import settings
+from app.models import User
 password_hash = PasswordHash(
     (
         Argon2Hasher(),
@@ -40,6 +40,16 @@ def create_access_token(user: User, expires_delta: timedelta) -> str:
         headers={"kid": settings.JWT_KEY_ID}
     )
     return encoded_jwt
+
+def decode_access_token(token: str) -> dict[str, Any]:
+    # Raises jwt.InvalidTokenError (or a subclass) if anything is wrong
+    return jwt.decode(
+        token,
+        PUBLIC_KEY,
+        algorithms=[ALGORITHM],
+        audience=settings.JWT_AUDIENCE,
+        issuer=settings.JWT_ISSUER,
+    )
 
 def generate_refresh_token() -> str:
     return secrets.token_urlsafe(64)

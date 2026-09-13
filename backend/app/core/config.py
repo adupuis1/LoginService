@@ -11,8 +11,6 @@ class Settings(BaseSettings):
     DATABASE_URL: str = "postgresql+psycopg://postgres:dev@localhost:5432/postgres"
     API_V1_STR: str = "/api/v1"
 
-    SECRET_KEY: str
-
     # JWT signing (RS256)
     PRIVATE_KEY_PATH: str = "keys/private.pem"
     PUBLIC_KEY_PATH: str = "keys/public.pem"
