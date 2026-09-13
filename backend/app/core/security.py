@@ -9,12 +9,12 @@ from pwdlib import PasswordHash
 from pwdlib.hashers.argon2 import Argon2Hasher
 from pwdlib.hashers.bcrypt import BcryptHasher
 
-from app.core.config import settings
-from app.models import User
+from backend.app.core.config import settings
+from backend.app.models import User
 password_hash = PasswordHash(
     (
         Argon2Hasher(),
-        BcryptHasher
+        BcryptHasher()
     )
 )
 

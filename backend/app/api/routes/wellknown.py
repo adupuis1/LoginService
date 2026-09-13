@@ -6,8 +6,8 @@ from cryptography.hazmat.primitives.serialization import load_pem_public_key
 from fastapi import APIRouter
 from jwt.algorithms import RSAAlgorithm
 
-from app.core import security
-from app.core.config import settings
+from backend.app.core import security
+from backend.app.core.config import settings
 
 router = APIRouter(tags=["well-known"])
 

@@ -3,10 +3,10 @@ from typing import Any
 from datetime import UTC, datetime, timedelta
 
 from sqlmodel import Session, select, col
-from app.core.security import get_password_hash, verify_password
-from app.models import User, UserCreate, UserUpdate, RefreshToken
-from app.core import security
-from app.core.config import settings
+from backend.app.core.security import get_password_hash, verify_password
+from backend.app.models import User, UserCreate, UserUpdate, RefreshToken
+from backend.app.core import security
+from backend.app.core.config import settings
 
 
 def create_user(*, session: Session, user_create: UserCreate) -> User:

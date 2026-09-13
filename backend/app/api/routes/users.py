@@ -4,17 +4,17 @@ from typing import Any
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import select
 
-from app import crud
-from app.api.deps import (
+from backend.app import crud
+from backend.app.api.deps import (
     CurrentUser, 
     SessionDep, 
     get_current_user,
     get_current_active_superuser,
 
 )
-from app.core.config import settings
-from app.core.security import get_password_hash, verify_password
-from app.models import (
+from backend.app.core.config import settings
+from backend.app.core.security import get_password_hash, verify_password
+from backend.app.models import (
     User,
     UserPublic,
     UserCreate,
