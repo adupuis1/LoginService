@@ -24,7 +24,7 @@ PRIVATE_KEY = Path(settings.PRIVATE_KEY_PATH).read_text()
 
 def create_access_token(user: User, expires_delta: timedelta) -> str:
     now = datetime.now(UTC)
-    payload = {
+    to_encode = {
         "sub": str(user.id),
         "username": user.username,
         "is_superuser": user.is_superuser,
@@ -35,7 +35,7 @@ def create_access_token(user: User, expires_delta: timedelta) -> str:
     }
     encoded_jwt = jwt.encode(
         to_encode, 
-        settings.PRIVATE_KEY, 
+        PRIVATE_KEY, 
         algorithm=ALGORITHM,
         headers={"kid": settings.JWT_KEY_ID}
     )
@@ -45,7 +45,7 @@ def generate_refresh_token() -> str:
     return secrets.token_urlsafe(64)
 
 def hash_token(raw_token: str) -> str:
-    return hashlib.sha256(raw_token.encode()).hexidigest()
+    return hashlib.sha256(raw_token.encode()).hexdigest()
 
 def verify_password(
         plain_password: str, hashed_password: str
