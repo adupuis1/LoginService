@@ -1,4 +1,6 @@
 from datetime import UTC, datetime, timedelta
+import hashlib
+import secrets
 from typing import Any
 
 import jwt
@@ -7,7 +9,7 @@ from pwdlib.hashers.argon2 import Argon2Hasher
 from pwdlib.hashers.bcrypt import BcryptHasher
 
 from app.core.config import settings
-
+from app.models import User
 password_hash = PasswordHash(
     (
         Argon2Hasher(),
@@ -15,14 +17,33 @@ password_hash = PasswordHash(
     )
 )
 
-ALGORITHM = "HS256"
+ALGORITHM = "RS256"
 
-def create_access_token(subject: str | Any, expires_delta: timedelta) -> str:
-    expire = datetime.now(UTC) + expires_delta
-    to_encode = {"exp": expire, "sub": str(subject)}
-    encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=ALGORITHM)
+
+def create_access_token(user: User, expires_delta: timedelta) -> str:
+    now = datetime.now(UTC)
+    payload = {
+        "sub": str(user.id),
+        "username": user.username,
+        "is_superuser": user.is_superuser,
+        "iss": settings.JWT_ISSUER,
+        "aud": settings.JWT_AUDIENCE,
+        "iat": now,
+        "exp": now + expires_delta,
+    }
+    encoded_jwt = jwt.encode(
+        to_encode, 
+        settings.PRIVATE_KEY, 
+        algorithm=ALGORITHM,
+        headers={"kid": settings.JWT_KEY_ID}
+    )
     return encoded_jwt
 
+def generate_refresh_token() -> str:
+    return secrets.token_urlsafe(64)
+
+def hash_token(raw_token: str) -> str:
+    return hashlib.sha256(raw_token.encode()).hexidigest()
 
 def verify_password(
         plain_password: str, hashed_password: str

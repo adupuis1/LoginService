@@ -1,9 +1,13 @@
 import uuid
 from typing import Any
+from datetime import UTC, datetime, timedelta
 
-from sqlmodel import Session, select
+from sqlmodel import Session, select, col
 from app.core.security import get_password_hash, verify_password
-from app.models import User, UserCreate, UserUpdate
+from app.models import User, UserCreate, UserUpdate, RefreshToken
+from app.core import security
+from app.core.config import settings
+
 
 def create_user(*, session: Session, user_create: UserCreate) -> User:
     db_obj = User.model_validate(
@@ -40,3 +44,37 @@ def authenticate(*, session: Session, username: str, password: str) -> User | No
         session.commit()
         session.refresh(db_user)
     return db_user
+
+
+def create_refresh_token(*, session: Session, user: User) -> str:
+    raw_token = security.generate_refresh_token()
+    db_token = RefreshToken(
+        user_id=user.id,
+        token_hash=security.hash_token(raw_token),
+        expires_at=datetime.now(UTC) + timedelta(days=settings.REFRESH_TOKEN_EXPIRE_DAYS),
+    )
+    session.add(db_token)
+    session.commit()
+    return raw_token
+
+def get_refresh_token(*, session: Session, raw_token: str) -> RefreshToken | None:
+    statement = select(RefreshToken).where(
+        RefreshToken.token_hash == security.hash_token(raw_token)
+    )
+    return session.exec(statement).first()
+
+def revoke_refresh_token(*, session: Session, db_token: RefreshToken) -> None:
+    db_token.revoked_at = datetime.now(UTC)
+    session.add(db_token)
+    session.commit()
+
+def revoke_all_refresh_tokens(*, session: Session, user_id) -> None:
+    statement = select(RefreshToken).where(
+        RefreshToken.user_id == user_id,
+        col(RefreshToken.revoked_at).is_(None),
+    )
+    now = datetime.now(UTC)
+    for db_token in session.exec(statement).all():
+        db_token.revoked_at = now
+        session.add(db_token)
+    session.commit()

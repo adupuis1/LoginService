@@ -39,13 +39,21 @@ class UserPublic(UserBase):
 # JSON payload containing access token
 class Token(SQLModel):
     access_token: str
+    refresh_token: str
     token_type: str = "bearer"
+    expires_in: int
 
 # Contents of JWT token
 class TokenPayload(SQLModel):
     sub: str | None = None
 
-
+class RefreshToken(SQLModel, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    user_id: uuid.UUID = Field(foreign_key="user.id", index = True)
+    token_hash : str = Field(unique=True, index=True)
+    expires_at: datetime = Field(sa_type=DateTime(timezone=True))
+    revoked_at: datetime | None = Field(defualt=None, sa_type=DateTime(timezone=True))
+    created_at: datetime = Field(default_factory=get_date_time_utc, sa_type=DateTime(timezone=True))
 
 class Message(SQLModel):
     message: str

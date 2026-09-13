@@ -8,3 +8,4 @@ pyjwt
 pwdlib
 pwdlib[argon2]
 pwdlib[bcrypt]
+"pyjwt[crypto]"
