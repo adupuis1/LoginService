@@ -23,8 +23,10 @@ from app.models import (
 
 router = APIRouter(prefix="/users", tags=["users"])
 
-
+# -----------------------------------------------------------------------------------
 # for admins ------------------------------------------------------------------------
+# -----------------------------------------------------------------------------------
+## --- create user ------------------------------------------------------------------
 @router.post(
     "/",
     dependencies=[Depends(get_current_active_superuser)],
@@ -43,7 +45,9 @@ def create_user(*, session: SessionDep, user_in: UserCreate) -> Any:
 
 # -----------------------------------------------------------------------------------
 
+# -----------------------------------------------------------------------------------
 # for users -------------------------------------------------------------------------
+# -----------------------------------------------------------------------------------
 ## --- signup -----------------------------------------------------------------------
 @router.post(
     "/signup",
@@ -60,6 +64,14 @@ def register_user(session: SessionDep, user_in: UserRegister) -> Any:
     user_create = UserCreate.model_validate(user_in)
     user = crud.create_user(session=session, user_create=user_create)
     return user
+
+## --- get self ---------------------------------------------------------------------
+@router.get(
+        "/self",
+        response_model=UserPublic
+)
+def read_user_self(current_user: CurrentUser) -> Any:
+    return current_user
 
 ## --- get user by id --------------------------------------------------------------
 @router.get(
