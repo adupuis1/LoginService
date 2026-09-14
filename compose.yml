@@ -1,0 +1,39 @@
+services:
+
+
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_PASSWORD: dev
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      DATABASE_URL: postgresql+psycopg://postgres:dev@db:5432/postgres
+      PRIVATE_KEY_PATH: /run/secrets/jwt_private_key
+      PUBLIC_KEY_PATH: /run/secrets/jwt_public_key
+    secrets:
+      - jwt_private_key
+      - jwt_public_key
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+secrets:
+  jwt_private_key:
+    file: ./backend/keys/private.pem
+  jwt_public_key:
+    file: ./backend/keys/private.pem
+
+volumes:
+  db-data:
