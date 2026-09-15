@@ -7,7 +7,7 @@ export function LoginPage() {
     return (
         <AuthCard title="Log in">
             <form onSubmit={vm.submit} className="grid gap-4">
-                <ErrorMessage message="{vm.error}" />
+                {vm.error && <ErrorMessage message={vm.error}/>}
                 <Field
                     label="Username"
                     autoComplete="username"
@@ -17,12 +17,12 @@ export function LoginPage() {
                 />
                 <Field
                     label="Password"
+                    type="password"
                     autoComplete="password"
-                    autoFocus
                     value={vm.password}
                     onChange={(e) => vm.setPassword(e.target.value)}
                 />
-                <Button disabled={vm.isSubmitting}>{vm.isSubmitting ? 'Loggin in...' : 'Login'}</Button>
+                <Button disabled={vm.isSubmitting}>{vm.isSubmitting ? 'Logging in...' : 'Login'}</Button>
             </form>
         </AuthCard>
     )

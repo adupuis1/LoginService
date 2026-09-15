@@ -41,7 +41,7 @@ function refreshTokens(): Promise<boolean> {
 export async function http<T>(path: string, init: RequestInit = {}, auth = true): Promise<T> {
     const send = () => {
         const headers = new Headers(init.headers)
-        if(auth && tokenStore.access) headers.set('Authorization', 'Bearer ${tokenStore.access}')
+        if(auth && tokenStore.access) headers.set('Authorization', `Bearer ${tokenStore.access}`)
         return fetch(path, { ...init, headers})
     }
 

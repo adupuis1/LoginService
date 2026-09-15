@@ -6,7 +6,7 @@ export function AccountPage() {
     const vm = useAccountViewModel()
 
     if(vm.mustLogin) return <Navigate to="/login" replace />
-    if(vm.isLoading || !vm.user) return <p className="p-8 text zinc-500">Loading...</p>
+    if(vm.isLoading || !vm.user) return <p className="p-8 text-zinc-500">Loading...</p>
 
 
     return (
