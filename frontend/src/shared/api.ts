@@ -1,5 +1,4 @@
-import { clear } from "console";
-import { ref } from "process";
+
 
 export const tokenStore = {
     get access() { return localStorage.getItem('access_token') },
@@ -28,7 +27,7 @@ function refreshTokens(): Promise<boolean> {
             body: JSON.stringify({refresh_token}),
         })
         if (!res.ok) {
-            tokenStore.clear
+            tokenStore.clear()
             return false
         }
         tokenStore.save(await res.json())
@@ -37,4 +36,21 @@ function refreshTokens(): Promise<boolean> {
         refreshing = null
     })
     return refreshing
+}
+
+export async function http<T>(path: string, init: RequestInit = {}, auth = true): Promise<T> {
+    const send = () => {
+        const headers = new Headers(init.headers)
+        if(auth && tokenStore.access) headers.set('Authorization', 'Bearer ${tokenStore.access}')
+        return fetch(path, { ...init, headers})
+    }
+
+    let res = await send()
+    if (auth && res.status === 401 && (await refreshTokens())) res = await send()
+    
+    if(!res.ok){
+        const body = await res.json().catch(() => null)
+        throw new Error(typeof body?.detail === 'string' ? body.detail : 'Something went wrong')
+    }
+    return res.json()
 }
