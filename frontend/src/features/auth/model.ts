@@ -22,13 +22,13 @@ export const authApi = {
     // login uses FORM data (OAuth2PasswordRequestForm), not JSON
     login: (username: string, password: string) => 
         http<Tokens>(
-            'api/v1/login/access-token',
+            '/api/v1/login/access-token',
             {method: 'POST', body: new URLSearchParams({ username, password }) },
             false,
         ),
 
     signup: (username: string, password: string) =>
-        http<User>('api/v1/users/signup', postJson({ username, password }), false),
+        http<User>('/api/v1/users/signup', postJson({ username, password }), false),
 
     me: () => http<User>('/api/v1/users/self'),
 
