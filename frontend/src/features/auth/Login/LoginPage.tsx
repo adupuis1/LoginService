@@ -1,3 +1,4 @@
+import { Link } from 'react-router'
 import { AuthCard, Button, ErrorMessage, Field } from "../../../shared/ui";
 import { useLoginViewModel } from "./useLoginViewModel";
 
@@ -18,11 +19,17 @@ export function LoginPage() {
                 <Field
                     label="Password"
                     type="password"
-                    autoComplete="password"
+                    autoComplete="current-password"
                     value={vm.password}
                     onChange={(e) => vm.setPassword(e.target.value)}
                 />
                 <Button disabled={vm.isSubmitting}>{vm.isSubmitting ? 'Logging in...' : 'Login'}</Button>
+                <p className="text-center text-sm text-zinc-500">
+                    No account?{' '}
+                    <Link to="/signup" className="font-medium text-zing-900 hover:underline">
+                    Sign up
+                    </Link>
+                </p>
             </form>
         </AuthCard>
     )

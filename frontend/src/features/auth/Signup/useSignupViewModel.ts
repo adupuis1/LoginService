@@ -18,11 +18,11 @@ export function useSignupViewModel() {
             if (password !== confirm) throw new Error("Password don't match")
 
             await authApi.signup(username.trim(), password)
-            await authApi.login(username.trim(), password)
+            return authApi.login(username.trim(), password)
         },
         onSuccess: (tokens) => {
             tokenStore.save(tokens)
-            navigate('/account', { replace: true })
+            navigate('/account', {replace: true})
         },
     })
 

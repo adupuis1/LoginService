@@ -18,12 +18,14 @@ export function SignupPage() {
         />
         <Field
           label="Password"
+          type="password"
           autoComplete="new-password"
           value={vm.password}
           onChange={(e) => vm.setPassword(e.target.value)}
         />
         <Field
           label="Confirm password"
+          type="password"
           autoComplete="new-password"
           value={vm.confirm}
           onChange={(e) => vm.setConfirm(e.target.value)}
