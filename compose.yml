@@ -29,6 +29,16 @@ services:
     depends_on:
       db:
         condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+
 secrets:
   jwt_private_key:
     file: ./backend/keys/private.pem
