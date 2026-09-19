@@ -26,7 +26,7 @@ export function LoginPage() {
                 <Button disabled={vm.isSubmitting}>{vm.isSubmitting ? 'Logging in...' : 'Login'}</Button>
                 <p className="text-center text-sm text-zinc-500">
                     No account?{' '}
-                    <Link to="/signup" className="font-medium text-zing-900 hover:underline">
+                    <Link to={vm.signupHref} className="font-medium text-zing-900 hover:underline">
                     Sign up
                     </Link>
                 </p>

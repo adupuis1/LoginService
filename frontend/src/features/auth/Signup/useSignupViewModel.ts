@@ -1,11 +1,12 @@
 import { useState, type SyntheticEvent } from 'react'
 import { useMutation } from '@tanstack/react-query'
-import { useNavigate } from 'react-router'
+import { useSearchParams } from 'react-router'
 import { tokenStore } from '../../../shared/api'
 import { authApi } from '../model'
+import { safeNext } from '../Login/useLoginViewModel'
 
 export function useSignupViewModel() {
-    const navigate = useNavigate()
+    const [params] = useSearchParams()
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const[confirm, setConfirm] = useState('')
@@ -22,7 +23,7 @@ export function useSignupViewModel() {
         },
         onSuccess: (tokens) => {
             tokenStore.save(tokens)
-            navigate('/account', {replace: true})
+            window.location.assign(safeNext(params.get('next')))
         },
     })
 
@@ -38,7 +39,8 @@ export function useSignupViewModel() {
             signup.mutate()
         },
         isSubmitting: signup.isPending,
-        error: signup.error?.message
+        error: signup.error?.message,
+        loginHref: `/login?${params}`, // keep ?next= when switching to login
         
         
     }
